@@ -3,7 +3,6 @@ package ca.bungo.screens.api.components.generics;
 import ca.bungo.screens.Screens;
 import ca.bungo.screens.api.RenderContext;
 import ca.bungo.screens.api.components.AbstractScreenComponent;
-import ca.bungo.screens.impl.Screen;
 import ca.bungo.screens.utility.TextDisplayMetrics;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -53,7 +52,10 @@ public class SimpleRectComponent extends AbstractScreenComponent {
     @Override public float height() { return height; }
 
     @Override
-    public void render(RenderContext screen) {
+    public void spawn(RenderContext screen) {
+        if(display != null){
+            despawn();
+        }
         Vector3f right = screen.right();
         Vector3f down = screen.down();
         double unitScale = TextDisplayMetrics.UNIT_SCALE;
@@ -90,11 +92,40 @@ public class SimpleRectComponent extends AbstractScreenComponent {
         });
     }
 
+    @Override
+    public void update(RenderContext context) {
+        if(display == null) return;
+        Vector3f right = context.right();
+        Vector3f down = context.down();
+        double unitScale = TextDisplayMetrics.UNIT_SCALE;
+
+        Vector3f scale = TextDisplayMetrics.computeBackgroundScale(GLYPH_PIXEL_SIZE, width, height, unitScale);
+
+        float heightWorld = scale.y * (GLYPH_PIXEL_SIZE + TextDisplayMetrics.GLYPH_PADDING_PX) * (float) TextDisplayMetrics.PIXELS_TO_WORLD;
+        float widthWorld = scale.x * TextDisplayMetrics.X_ANCHOR_OFFSET_PX * (float) TextDisplayMetrics.PIXELS_TO_WORLD;
+
+        Vector3f translation = new Vector3f(down).mul(heightWorld)
+                .add(new Vector3f(right).mul(widthWorld));
+        translation.sub(new Vector3f(context.normal()).mul((context.layer()) * TextDisplayMetrics.LAYER_STEP_WORLD));
+
+        Transformation transformation = new Transformation(
+                translation,
+                new Quaternionf(context.orientation()),
+                scale,
+                new Quaternionf()
+        );
+
+        display.setTransformation(transformation);
+    }
+
     public void offsetTranslation(Consumer<TextDisplay> displayConsumer){
         displayConsumer.accept(display);
     }
 
     public void despawn() {
-        if (display != null) display.remove();
+        if (display != null) {
+            display.remove();
+            display = null;
+        }
     }
 }

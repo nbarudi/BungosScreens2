@@ -1,9 +1,7 @@
 package ca.bungo.screens.api.components.generics;
 
-import ca.bungo.screens.Screens;
 import ca.bungo.screens.api.RenderContext;
 import ca.bungo.screens.api.components.AbstractScreenComponent;
-import ca.bungo.screens.impl.Screen;
 import ca.bungo.screens.utility.ComponentUtility;
 import ca.bungo.screens.utility.FontHelper;
 import ca.bungo.screens.utility.TextDisplayMetrics;
@@ -70,7 +68,11 @@ public class LabelComponent extends AbstractScreenComponent {
     }
 
     @Override
-    public void render(RenderContext screen) {
+    public void spawn(RenderContext screen) {
+        if(textDisplay != null) {
+            despawn();
+        }
+
         Vector3f right = screen.right();
         Vector3f down = screen.down();
 
@@ -99,8 +101,6 @@ public class LabelComponent extends AbstractScreenComponent {
 
         float heightWorld = uniformScale * TextDisplayMetrics.TEXT_LINE_HEIGHT_PX * (float) TextDisplayMetrics.PIXELS_TO_WORLD;
 
-        Screens.LOGGER.info("Uniform Scale: {}", uniformScale);
-
         float totalAdvancePx = FontHelper.measureWidth(plainText());
         float halfWidthWorld = uniformScale * (totalAdvancePx - TextDisplayMetrics.TEXT_X_RESIDUAL_PX) * (float) TextDisplayMetrics.PIXELS_TO_WORLD / 2f;
         Vector3f translation = new Vector3f(right).mul(halfWidthWorld)
@@ -126,6 +126,48 @@ public class LabelComponent extends AbstractScreenComponent {
         textDisplay.setTransformation(transformation);
     }
 
+    @Override
+    public void update(RenderContext context) {
+        if(textDisplay == null) return;
+        Vector3f right = context.right();
+        Vector3f down = context.down();
+
+        float intrinsicWidthPx  = FontHelper.measureWidth(plainText());
+        float intrinsicHeightPx = TextDisplayMetrics.TEXT_LINE_HEIGHT_PX;
+
+        float boxWorldWidth  = widthPercent  * context.width()  * (float) TextDisplayMetrics.UNIT_SCALE;
+        float boxWorldHeight = heightPercent * context.height() * (float) TextDisplayMetrics.UNIT_SCALE;
+
+        float intrinsicWorldWidth  = intrinsicWidthPx  * (float) TextDisplayMetrics.PIXELS_TO_WORLD;
+        float intrinsicWorldHeight = intrinsicHeightPx * (float) TextDisplayMetrics.PIXELS_TO_WORLD;
+
+        float scaleToFitX = boxWorldWidth  / intrinsicWorldWidth;
+        float scaleToFitY = boxWorldHeight / intrinsicWorldHeight;
+
+        float uniformScale = Math.min(scaleToFitX, scaleToFitY);
+
+        Vector3f scale = new Vector3f(uniformScale, uniformScale, 1f);
+
+        float heightWorld = uniformScale * TextDisplayMetrics.TEXT_LINE_HEIGHT_PX * (float) TextDisplayMetrics.PIXELS_TO_WORLD;
+
+        float totalAdvancePx = FontHelper.measureWidth(plainText());
+        float halfWidthWorld = uniformScale * (totalAdvancePx - TextDisplayMetrics.TEXT_X_RESIDUAL_PX) * (float) TextDisplayMetrics.PIXELS_TO_WORLD / 2f;
+        Vector3f translation = new Vector3f(right).mul(halfWidthWorld)
+                .add(new Vector3f(down).mul(heightWorld))
+                .add(0, 0,  0);
+
+        translation.sub(new Vector3f(context.normal()).mul((context.layer()+1) * TextDisplayMetrics.LAYER_STEP_WORLD));
+
+        Transformation transformation = new Transformation(
+                translation,
+                new Quaternionf(context.orientation()),
+                scale,
+                new Quaternionf()
+        );
+
+        textDisplay.setTransformation(transformation);
+    }
+
     public void offsetTranslation(Consumer<TextDisplay> displayConsumer){
         displayConsumer.accept(textDisplay);
     }
@@ -134,7 +176,7 @@ public class LabelComponent extends AbstractScreenComponent {
     public void despawn() {
         if(textDisplay != null) {
             textDisplay.remove();
-
+            textDisplay = null;
         }
     }
 

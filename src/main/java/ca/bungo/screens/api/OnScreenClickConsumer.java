@@ -1,6 +1,6 @@
 package ca.bungo.screens.api;
 
-import ca.bungo.screens.impl.Screen;
+import ca.bungo.screens.api.components.Screen;
 import org.bukkit.entity.Player;
 
 @FunctionalInterface

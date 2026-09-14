@@ -1,7 +1,5 @@
 package ca.bungo.screens.api;
 
-import ca.bungo.screens.impl.Screen;
-
 public interface ScreenComponent {
 
     String id();
@@ -10,6 +8,7 @@ public interface ScreenComponent {
     float width();
     float height();
 
-    void render(RenderContext screen);
+    void spawn(RenderContext context);
+    void update(RenderContext context);
     void despawn();
 }

@@ -1,9 +1,8 @@
-package ca.bungo.screens.impl;
+package ca.bungo.screens.api.components;
 
 import ca.bungo.screens.Screens;
 import ca.bungo.screens.api.RenderContext;
 import ca.bungo.screens.api.ScreenComponent;
-import ca.bungo.screens.api.components.InteractableComponent;
 import ca.bungo.screens.api.components.generics.SimpleRectComponent;
 import ca.bungo.screens.utility.TextDisplayMetrics;
 import org.bukkit.Color;
@@ -16,11 +15,14 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class Screen implements RenderContext {
 
     private static final double DEFAULT_MAX_REACH = 5.0; // adjust to whatever interact range makes sense
     private static final float PARALLEL_EPSILON = 1e-4f;
+
+    private String id;
 
     private Location location;
     private Quaternionf orientation;
@@ -40,7 +42,8 @@ public class Screen implements RenderContext {
 
     private SimpleRectComponent background;
 
-    public Screen(Location location, Quaternionf orientation, int width, int height) {
+    public Screen(String id, Location location, Quaternionf orientation, int width, int height) {
+        this.id = id;
         this.location = location;
         this.orientation = new Quaternionf(orientation).normalize();
         this.width = width;
@@ -50,6 +53,10 @@ public class Screen implements RenderContext {
 
         this.screenComponents = new ArrayList<>();
         calculateVectors();
+    }
+
+    public Screen(Location location, Quaternionf orientation, int width, int height) {
+        this(UUID.randomUUID().toString(), location, orientation, width, height);
     }
 
     private void calculateVectors(){
@@ -84,6 +91,9 @@ public class Screen implements RenderContext {
         this.height = height;
     }
 
+    public String id() {
+        return id;
+    }
     public Location origin(){
         return location.clone();
     }
@@ -133,25 +143,32 @@ public class Screen implements RenderContext {
     }
 
 
-    public void spawnScreen() {
+    public void spawn() {
         spawnBackground(this.backgroundColor);
         for(ScreenComponent screenComponent : screenComponents){
-            screenComponent.render(this);
+            screenComponent.spawn(this);
+        }
+    }
+    public void update() {
+        if(background != null) background.update(this);
+        for(ScreenComponent screenComponent : screenComponents){
+            screenComponent.update(this);
         }
     }
 
-    public void despawnScreen() {
+    public void despawn() {
         if(background != null) {
             background.despawn();
-            for (ScreenComponent screenComponent : screenComponents) {
-                screenComponent.despawn();
-            }
+            background = null;
+        }
+        for (ScreenComponent screenComponent : screenComponents) {
+            screenComponent.despawn();
         }
     }
 
     private void spawnBackground(Color color) {
         this.background = new SimpleRectComponent(0, 0, width, height, backgroundColor);
-        background.render(this);
+        background.spawn(this);
 
     }
 
@@ -167,8 +184,6 @@ public class Screen implements RenderContext {
         if(localX < 0 || localX > width) return null;
         if(localY < 0 || localY > height) return null;
 
-        Screens.LOGGER.info("Clicked {} - {}", localX, localY);
-
         for (ScreenComponent screenComponent : screenComponents.reversed()){
             if(!(screenComponent instanceof InteractableComponent interactableComponent)) continue;
 
@@ -176,7 +191,6 @@ public class Screen implements RenderContext {
             float relY = localY - screenComponent.y();
 
             if(relX >= 0 && relX <= screenComponent.width() && relY >= 0 && relY <= screenComponent.height()){
-                //Screens.LOGGER.info("Clicked Component {} - {} - {}", screenComponent.id(), localX, localY);
                 interactableComponent.onClick(player, localX, localY);
                 return interactableComponent;
             }

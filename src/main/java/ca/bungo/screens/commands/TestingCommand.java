@@ -3,7 +3,7 @@ package ca.bungo.screens.commands;
 import ca.bungo.screens.Screens;
 import ca.bungo.screens.api.components.buttons.SimpleButtonComponent;
 import ca.bungo.screens.api.components.generics.LabelComponent;
-import ca.bungo.screens.impl.Screen;
+import ca.bungo.screens.api.components.Screen;
 import ca.bungo.screens.utility.FontHelper;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -21,9 +21,9 @@ import org.joml.Quaternionf;
 
 import java.util.UUID;
 
-import static ca.bungo.screens.Screens.screen;
-
 public class TestingCommand extends Command {
+
+    private Screen screen;
 
     public TestingCommand() {
         super("test");
@@ -47,7 +47,8 @@ public class TestingCommand extends Command {
 
             if(cmd.equalsIgnoreCase("spawn")){
                 if(screen != null) {
-                    screen.despawnScreen();
+                    Screens.getInstance().screenManager.unregister(screen.id());
+                    screen = null;
                 }
 
                 screen = new Screen(
@@ -64,14 +65,13 @@ public class TestingCommand extends Command {
                         Color.GREEN, Component.text("Submit"),
                         (clicker, localX, localY, clicked) -> {
                             Screens.LOGGER.info("{} has clicked the screen!", clicker.getName());
-                            Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(TestingCommand.class), clicked::despawnScreen, 10);
+                            Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(TestingCommand.class), clicked::despawn, 10);
                         }
                 ));
-                screen.spawnScreen();
+                Screens.getInstance().screenManager.register(screen);
             } else if (cmd.equalsIgnoreCase("reload")) {
                 if(screen != null) {
-                    screen.despawnScreen();
-                    screen.spawnScreen();
+
                 }
             }
         }

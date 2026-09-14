@@ -1,14 +1,12 @@
 package ca.bungo.screens.api.components.buttons;
 
-import ca.bungo.screens.Screens;
 import ca.bungo.screens.api.OnScreenClickConsumer;
 import ca.bungo.screens.api.RenderContext;
 import ca.bungo.screens.api.components.AbstractScreenComponent;
 import ca.bungo.screens.api.components.InteractableComponent;
 import ca.bungo.screens.api.components.generics.LabelComponent;
 import ca.bungo.screens.api.components.generics.SimpleRectComponent;
-import ca.bungo.screens.impl.Screen;
-import ca.bungo.screens.utility.TextDisplayMetrics;
+import ca.bungo.screens.api.components.Screen;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -26,7 +24,6 @@ public class SimpleButtonComponent extends AbstractScreenComponent implements In
     private SimpleRectComponent background;
 
     private Component labelText;
-    private int layer = 0;
 
     private RenderContext lastContext;
 
@@ -66,21 +63,38 @@ public class SimpleButtonComponent extends AbstractScreenComponent implements In
     }
 
     @Override
-    public void render(RenderContext screen) {
+    public void spawn(RenderContext screen) {
+        if(background != null) {
+            background.despawn();
+        }
+        if(label != null) {
+            label.despawn();
+        }
         this.lastContext = screen;
-        this.layer = screen.layer()+1;
         if(labelText != null) {
             label = new LabelComponent(x(), y(), labelText);
-            label.render(this);
+            label.spawn(this);
         }
         background = new SimpleRectComponent(x(), y(), width(), height(), backgroundColor);
-        background.render(this);
+        background.spawn(this);
+    }
+
+    @Override
+    public void update(RenderContext context) {
+        if(background != null) background.update(context);
+        if(label != null) label.update(context);
     }
 
     @Override
     public void despawn() {
-        if(label != null)  label.despawn();
-        if(background != null) background.despawn();
+        if(label != null){
+            label.despawn();
+            label = null;
+        }
+        if(background != null) {
+            background.despawn();
+            background = null;
+        }
     }
 
     @Override
@@ -115,7 +129,10 @@ public class SimpleButtonComponent extends AbstractScreenComponent implements In
 
     @Override
     public int layer() {
-        return layer;
+        if (lastContext == null) {
+            return 0;
+        }
+        return lastContext.layer()+1;
     }
 
     @Override

@@ -1,0 +1,11 @@
+name: Screens
+description: $description
+version: '${version}'
+
+main: ca.bungo.screens.Screens
+loader: ca.bungo.screens.ScreensLoader
+api-version: '26.2'
+load: POSTWORLD
+
+authors: [ Bungo, nbarudi ]
+website: bungo.ca

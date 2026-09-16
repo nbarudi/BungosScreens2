@@ -1,9 +1,13 @@
 package ca.bungo.screens.commands;
 
 import ca.bungo.screens.Screens;
+import ca.bungo.screens.api.ScreenComponent;
+import ca.bungo.screens.api.animation.Animatable;
 import ca.bungo.screens.api.components.buttons.SimpleButtonComponent;
 import ca.bungo.screens.api.components.generics.LabelComponent;
 import ca.bungo.screens.api.components.Screen;
+import ca.bungo.screens.api.impl.animations.MoveToAnimation;
+import ca.bungo.screens.api.impl.animations.RotateZAnimation;
 import ca.bungo.screens.utility.FontHelper;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
@@ -33,7 +37,7 @@ public class TestingCommand extends Command {
     public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String @NotNull [] args) {
         if(!(sender instanceof Player player)) return false;
 
-        Location location = new Location(player.getWorld(), 0, 75, 0);
+        Location location = new Location(player.getWorld(), 0, 85, 0);
 
         if (args.length == 0) {
             player.sendMessage(Component.text("hello there!"));
@@ -54,18 +58,23 @@ public class TestingCommand extends Command {
                 screen = new Screen(
                         location,
                         new Quaternionf(0, 0, 0, 1),
-                        1080,
-                        720
+                        200,
+                        200
                 );
                 screen.setColor(Color.BLACK);
-                screen.addComponent(new LabelComponent(0, 0, Component.text("difforwant world!", NamedTextColor.GOLD)));
+                screen.addComponent(new LabelComponent(0, 0, Component.text("New Screen!", NamedTextColor.GOLD)));
                 screen.addComponent(new SimpleButtonComponent(
-                        UUID.randomUUID().toString(),
-                        0, 0, 0.25f, 0.125f,
+                        "submit-button",
+                        0, 50, 0.25f, 0.125f,
                         Color.GREEN, Component.text("Submit"),
                         (clicker, localX, localY, clicked) -> {
-                            Screens.LOGGER.info("{} has clicked the screen!", clicker.getName());
-                            Bukkit.getScheduler().runTaskLater(JavaPlugin.getProvidingPlugin(TestingCommand.class), clicked::despawn, 10);
+                            MoveToAnimation moveAnim = new MoveToAnimation(localX + 10, localY + 10, 1);
+                            ScreenComponent component = clicked.getComponent("submit-button");
+
+                            if(!(component instanceof Animatable animatable)){
+                                return;
+                            }
+                            animatable.addAnimation(moveAnim);
                         }
                 ));
                 Screens.getInstance().screenManager.register(screen);

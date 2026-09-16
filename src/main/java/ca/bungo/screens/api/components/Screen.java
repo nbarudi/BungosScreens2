@@ -3,21 +3,27 @@ package ca.bungo.screens.api.components;
 import ca.bungo.screens.Screens;
 import ca.bungo.screens.api.RenderContext;
 import ca.bungo.screens.api.ScreenComponent;
+import ca.bungo.screens.api.animation.Animatable;
 import ca.bungo.screens.api.components.generics.SimpleRectComponent;
 import ca.bungo.screens.utility.TextDisplayMetrics;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 public class Screen implements RenderContext {
+
+    private static final JavaPlugin plugin = JavaPlugin.getProvidingPlugin(Screen.class);
 
     private static final double DEFAULT_MAX_REACH = 5.0; // adjust to whatever interact range makes sense
     private static final float PARALLEL_EPSILON = 1e-4f;
@@ -41,6 +47,8 @@ public class Screen implements RenderContext {
     private final List<ScreenComponent> screenComponents;
 
     private SimpleRectComponent background;
+
+    private BukkitTask bukkitTask;
 
     public Screen(String id, Location location, Quaternionf orientation, int width, int height) {
         this.id = id;
@@ -142,13 +150,13 @@ public class Screen implements RenderContext {
         return backgroundColor;
     }
 
-
     public void spawn() {
         spawnBackground(this.backgroundColor);
         for(ScreenComponent screenComponent : screenComponents){
             screenComponent.spawn(this);
         }
     }
+
     public void update() {
         if(background != null) background.update(this);
         for(ScreenComponent screenComponent : screenComponents){
@@ -219,4 +227,5 @@ public class Screen implements RenderContext {
 
         return new Vector3f(rayOrigin).add(new Vector3f(rayDirection).mul(t));
     }
+
 }

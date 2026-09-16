@@ -1,16 +1,17 @@
 package ca.bungo.screens.api.components;
 
 import ca.bungo.screens.api.ScreenComponent;
+import org.joml.Quaternionf;
 
 import java.util.UUID;
 
 public abstract class AbstractScreenComponent implements ScreenComponent {
 
     private final String id;
-    private final float x;
-    private final float y;
-    private final float width;
-    private final float height;
+    private float x;
+    private float y;
+    private float width;
+    private float height;
 
 
     public AbstractScreenComponent(String id, float x, float y, float width, float height) {
@@ -35,6 +36,10 @@ public abstract class AbstractScreenComponent implements ScreenComponent {
     public float x() { return x; }
     @Override
     public float y() { return y; }
+    protected void setX(float x){ this.x = x; }
+    protected void setY(float y){ this.y = y; }
+    protected void setWidth(float width){ this.width = width; }
+    protected void setHeight(float height){ this.height = height; }
     @Override
     public float width() { return width; }
     @Override

@@ -16,10 +16,15 @@ public final class TextDisplayMetrics {
 
 
     public static Vector3f computeBackgroundScale(int glyphPixelSize, float desiredWidthLocal, float desiredHeightLocal, double unitScale) {
-        double baseWorldSize = glyphPixelSize * TextDisplayMetrics.PIXELS_TO_WORLD;
+        return computeBackgroundScale(glyphPixelSize, glyphPixelSize, desiredWidthLocal, desiredHeightLocal, unitScale);
+    }
 
-        float scaleX = (float) ((desiredWidthLocal * unitScale) / baseWorldSize);
-        float scaleY = (float) ((desiredHeightLocal * unitScale) / baseWorldSize);
+    public static Vector3f computeBackgroundScale(float glyphPixelWidth, float glyphPixelHeight, float desiredWidthLocal, float desiredHeightLocal, double unitScale) {
+        double baseWorldWidth = glyphPixelWidth * TextDisplayMetrics.PIXELS_TO_WORLD;
+        double baseWorldHeight = glyphPixelHeight * TextDisplayMetrics.PIXELS_TO_WORLD;
+
+        float scaleX = (float) ((desiredWidthLocal * unitScale) / baseWorldWidth);
+        float scaleY = (float) ((desiredHeightLocal * unitScale) / baseWorldHeight);
 
         return new Vector3f(scaleX, scaleY, 1f);
     }

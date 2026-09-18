@@ -6,24 +6,20 @@ import ca.bungo.screens.api.animation.Animatable;
 import ca.bungo.screens.api.components.buttons.SimpleButtonComponent;
 import ca.bungo.screens.api.components.generics.LabelComponent;
 import ca.bungo.screens.api.components.Screen;
+import ca.bungo.screens.api.components.generics.SimpleGlyphComponent;
 import ca.bungo.screens.api.impl.animations.MoveToAnimation;
-import ca.bungo.screens.api.impl.animations.RotateZAnimation;
 import ca.bungo.screens.utility.FontHelper;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TextDisplay;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
-
-import java.util.UUID;
 
 public class TestingCommand extends Command {
 
@@ -40,12 +36,7 @@ public class TestingCommand extends Command {
         Location location = new Location(player.getWorld(), 0, 85, 0);
 
         if (args.length == 0) {
-            player.sendMessage(Component.text("hello there!"));
-            player.sendMessage(Component.text("hello there!").font(Key.key("bungoscreens", "screens")));
-            player.sendMessage(Component.text("Font Width: " + FontHelper.measureWidth("hello there!")));
-
-            TextDisplay dis = player.getLocation().getWorld().spawn(player.getLocation(), TextDisplay.class);
-            dis.text(Component.text("Hello World!", NamedTextColor.RED));
+            player.sendMessage(Component.text("\uE200").font(Key.key("bungoscreens", "screens")));
         } else if (args.length == 1) {
             String cmd = args[0];
 
@@ -77,6 +68,7 @@ public class TestingCommand extends Command {
                             animatable.addAnimation(moveAnim);
                         }
                 ));
+                screen.addComponent(new SimpleGlyphComponent(0, 100, 32, 8, '\uE200', 32, 8));
                 Screens.getInstance().screenManager.register(screen);
             } else if (cmd.equalsIgnoreCase("reload")) {
                 if(screen != null) {

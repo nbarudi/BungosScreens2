@@ -1,4 +1,4 @@
-package ca.bungo.screens.api.components.generics;
+package ca.bungo.screens.api.impl.components.generics;
 
 import net.kyori.adventure.text.Component;
 import org.joml.Vector3f;

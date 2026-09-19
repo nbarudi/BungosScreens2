@@ -1,7 +1,6 @@
-package ca.bungo.screens.api.components;
+package ca.bungo.screens.api.impl.components;
 
 import ca.bungo.screens.api.ScreenComponent;
-import org.joml.Quaternionf;
 
 import java.util.UUID;
 

@@ -3,9 +3,8 @@ package ca.bungo.screens.api.registry;
 import ca.bungo.screens.Screens;
 import ca.bungo.screens.api.ScreenComponent;
 import ca.bungo.screens.api.animation.Animatable;
-import ca.bungo.screens.api.components.Screen;
+import ca.bungo.screens.api.impl.components.Screen;
 import org.bukkit.World;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;

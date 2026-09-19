@@ -1,4 +1,4 @@
-package ca.bungo.screens.api.components.generics;
+package ca.bungo.screens.api.impl.components.generics;
 
 import ca.bungo.screens.api.RenderContext;
 import ca.bungo.screens.api.animation.Animatable;
@@ -7,7 +7,7 @@ import ca.bungo.screens.api.animation.AnimationChannel;
 import ca.bungo.screens.api.animation.locks.Positionable;
 import ca.bungo.screens.api.animation.locks.RotatableZ;
 import ca.bungo.screens.api.animation.locks.Scalable;
-import ca.bungo.screens.api.components.AbstractScreenComponent;
+import ca.bungo.screens.api.impl.components.AbstractScreenComponent;
 import ca.bungo.screens.utility.ComponentUtility;
 import ca.bungo.screens.utility.FontHelper;
 import ca.bungo.screens.utility.TextDisplayMetrics;

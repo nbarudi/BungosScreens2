@@ -49,13 +49,12 @@ publishing {
 
     repositories {
         maven {
-            name = "nexus" // this name drives the credential property names below
+            name = "nexus"
 
             val releasesUrl = uri("https://nexus.bungo.ca/repository/maven-releases/")
             val snapshotsUrl = uri("https://nexus.bungo.ca/repository/maven-snapshots/")
             url = if (version.toString().endsWith("-SNAPSHOT")) snapshotsUrl else releasesUrl
 
-            // Gradle looks up nexusUsername / nexusPassword automatically
             credentials(PasswordCredentials::class)
         }
     }

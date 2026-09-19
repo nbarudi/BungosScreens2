@@ -1,10 +1,9 @@
-package ca.bungo.screens.api.components;
+package ca.bungo.screens.api.impl.components;
 
-import ca.bungo.screens.Screens;
+import ca.bungo.screens.api.InteractableComponent;
 import ca.bungo.screens.api.RenderContext;
 import ca.bungo.screens.api.ScreenComponent;
-import ca.bungo.screens.api.animation.Animatable;
-import ca.bungo.screens.api.components.generics.SimpleRectComponent;
+import ca.bungo.screens.api.impl.components.generics.SimpleRectComponent;
 import ca.bungo.screens.utility.TextDisplayMetrics;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -15,7 +14,6 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 
 import javax.annotation.Nullable;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

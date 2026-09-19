@@ -1,4 +1,4 @@
-package ca.bungo.screens.api.components;
+package ca.bungo.screens.api;
 
 import org.bukkit.entity.Player;
 

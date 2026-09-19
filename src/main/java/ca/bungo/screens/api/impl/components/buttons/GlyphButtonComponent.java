@@ -1,4 +1,4 @@
-package ca.bungo.screens.api.components.buttons;
+package ca.bungo.screens.api.impl.components.buttons;
 
 import ca.bungo.screens.api.OnScreenClickConsumer;
 import ca.bungo.screens.api.RenderContext;
@@ -7,11 +7,11 @@ import ca.bungo.screens.api.animation.Animation;
 import ca.bungo.screens.api.animation.AnimationChannel;
 import ca.bungo.screens.api.animation.locks.Positionable;
 import ca.bungo.screens.api.animation.locks.Scalable;
-import ca.bungo.screens.api.components.AbstractScreenComponent;
-import ca.bungo.screens.api.components.InteractableComponent;
-import ca.bungo.screens.api.components.Screen;
-import ca.bungo.screens.api.components.generics.CentredLabelComponent;
-import ca.bungo.screens.api.components.generics.SimpleGlyphComponent;
+import ca.bungo.screens.api.impl.components.AbstractScreenComponent;
+import ca.bungo.screens.api.InteractableComponent;
+import ca.bungo.screens.api.impl.components.Screen;
+import ca.bungo.screens.api.impl.components.generics.CentredLabelComponent;
+import ca.bungo.screens.api.impl.components.generics.SimpleGlyphComponent;
 import ca.bungo.screens.utility.TextDisplayMetrics;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;

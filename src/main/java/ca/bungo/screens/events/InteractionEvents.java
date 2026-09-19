@@ -1,7 +1,7 @@
 package ca.bungo.screens.events;
 
 import ca.bungo.screens.Screens;
-import ca.bungo.screens.api.components.Screen;
+import ca.bungo.screens.api.impl.components.Screen;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

@@ -4,6 +4,7 @@ import ca.bungo.screens.Screens;
 import ca.bungo.screens.api.ScreenComponent;
 import ca.bungo.screens.api.animation.Animatable;
 import ca.bungo.screens.api.components.buttons.SimpleButtonComponent;
+import ca.bungo.screens.api.components.generics.CentredLabelComponent;
 import ca.bungo.screens.api.components.generics.LabelComponent;
 import ca.bungo.screens.api.components.Screen;
 import ca.bungo.screens.api.components.generics.SimpleGlyphComponent;
@@ -49,8 +50,8 @@ public class TestingCommand extends Command {
                 screen = new Screen(
                         location,
                         new Quaternionf(0, 0, 0, 1),
-                        200,
-                        200
+                        400,
+                        400
                 );
                 screen.setColor(Color.BLACK);
                 screen.addComponent(new LabelComponent(0, 0, Component.text("New Screen!", NamedTextColor.GOLD)));
@@ -69,6 +70,7 @@ public class TestingCommand extends Command {
                         }
                 ));
                 screen.addComponent(new SimpleGlyphComponent(0, 100, 32, 8, '\uE200', 32, 8));
+                screen.addComponent(new CentredLabelComponent(0, 150, Component.text("Centred Text!", NamedTextColor.GOLD)));
                 Screens.getInstance().screenManager.register(screen);
             } else if (cmd.equalsIgnoreCase("reload")) {
                 if(screen != null) {

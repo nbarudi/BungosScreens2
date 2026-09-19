@@ -10,9 +10,11 @@ import ca.bungo.screens.api.animation.locks.RotatableZ;
 import ca.bungo.screens.api.animation.locks.Scalable;
 import ca.bungo.screens.api.components.AbstractScreenComponent;
 import ca.bungo.screens.api.components.InteractableComponent;
+import ca.bungo.screens.api.components.generics.CentredLabelComponent;
 import ca.bungo.screens.api.components.generics.LabelComponent;
 import ca.bungo.screens.api.components.generics.SimpleRectComponent;
 import ca.bungo.screens.api.components.Screen;
+import ca.bungo.screens.utility.TextDisplayMetrics;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -32,7 +34,7 @@ public class SimpleButtonComponent extends AbstractScreenComponent implements In
     private final Map<AnimationChannel, Animation<?>> animations = new HashMap<>();
 
     private Color backgroundColor;
-    private LabelComponent label;
+    private CentredLabelComponent label;
     private SimpleRectComponent background;
 
     private Component labelText;
@@ -74,6 +76,14 @@ public class SimpleButtonComponent extends AbstractScreenComponent implements In
         return heightPercent * lastContext.height();
     }
 
+    private float centreX() {
+        return x() - TextDisplayMetrics.TEXT_X_RESIDUAL_PX/2f + width() / 2f;
+    }
+
+    private float centreY() {
+        return y() + height() / 2f;
+    }
+
     @Override
     public void spawn(RenderContext screen) {
         if(background != null) {
@@ -84,7 +94,7 @@ public class SimpleButtonComponent extends AbstractScreenComponent implements In
         }
         this.lastContext = screen;
         if(labelText != null) {
-            label = new LabelComponent(x(), y(), labelText);
+            label = new CentredLabelComponent(centreX(), centreY(), labelText);
             label.spawn(this);
         }
         background = new SimpleRectComponent(x(), y(), width(), height(), backgroundColor);
@@ -100,7 +110,7 @@ public class SimpleButtonComponent extends AbstractScreenComponent implements In
             background.update(this);
         }
         if(label != null) {
-            label.position(x(), y());
+            label.position(centreX(), centreY());
             //label.scale(width(), height());
             label.update(this);
         }

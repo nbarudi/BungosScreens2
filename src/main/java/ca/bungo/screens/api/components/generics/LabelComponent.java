@@ -81,6 +81,11 @@ public class LabelComponent extends AbstractScreenComponent implements Animatabl
         return PlainTextComponentSerializer.plainText().serialize(component);
     }
 
+    protected Vector3f alignmentOffset(Vector3f right, Vector3f down, float halfWidthWorld, float heightWorld) {
+        return new Vector3f(right).mul(halfWidthWorld)
+                .add(new Vector3f(down).mul(heightWorld));
+    }
+
     @Override
     public void spawn(RenderContext screen) {
         lastContext = screen;
@@ -118,9 +123,7 @@ public class LabelComponent extends AbstractScreenComponent implements Animatabl
 
         float totalAdvancePx = FontHelper.measureWidth(plainText());
         float halfWidthWorld = uniformScale * (totalAdvancePx - TextDisplayMetrics.TEXT_X_RESIDUAL_PX) * (float) TextDisplayMetrics.PIXELS_TO_WORLD / 2f;
-        Vector3f translation = new Vector3f(right).mul(halfWidthWorld)
-                .add(new Vector3f(down).mul(heightWorld))
-                .add(0, 0,  0);
+        Vector3f translation = alignmentOffset(right, down, halfWidthWorld, heightWorld);
 
         translation.sub(new Vector3f(screen.normal()).mul((screen.layer()+1) * TextDisplayMetrics.LAYER_STEP_WORLD));
 
@@ -171,9 +174,7 @@ public class LabelComponent extends AbstractScreenComponent implements Animatabl
 
         float totalAdvancePx = FontHelper.measureWidth(plainText());
         float halfWidthWorld = uniformScale * (totalAdvancePx - TextDisplayMetrics.TEXT_X_RESIDUAL_PX) * (float) TextDisplayMetrics.PIXELS_TO_WORLD / 2f;
-        Vector3f translation = new Vector3f(right).mul(halfWidthWorld)
-                .add(new Vector3f(down).mul(heightWorld))
-                .add(0, 0,  0);
+        Vector3f translation = alignmentOffset(right, down, halfWidthWorld, heightWorld);
 
         translation.sub(new Vector3f(context.normal()).mul((context.layer()+1) * TextDisplayMetrics.LAYER_STEP_WORLD));
 

@@ -3,6 +3,7 @@ package ca.bungo.screens.commands;
 import ca.bungo.screens.Screens;
 import ca.bungo.screens.api.ScreenComponent;
 import ca.bungo.screens.api.animation.Animatable;
+import ca.bungo.screens.api.components.buttons.GlyphButtonComponent;
 import ca.bungo.screens.api.components.buttons.SimpleButtonComponent;
 import ca.bungo.screens.api.components.generics.CentredLabelComponent;
 import ca.bungo.screens.api.components.generics.LabelComponent;
@@ -71,6 +72,20 @@ public class TestingCommand extends Command {
                 ));
                 screen.addComponent(new SimpleGlyphComponent(0, 100, 32, 8, '\uE200', 32, 8));
                 screen.addComponent(new CentredLabelComponent(0, 150, Component.text("Centred Text!", NamedTextColor.GOLD)));
+                screen.addComponent(new GlyphButtonComponent(
+                        "submit-button-2",
+                        0, 200, 0.25f, 0.125f,
+                        '\uE200', 32, 8, Component.text("Submit"),
+                        (clicker, localX, localY, clicked) -> {
+                            MoveToAnimation moveAnim = new MoveToAnimation(localX + 10, localY + 10, 1);
+                            ScreenComponent component = clicked.getComponent("submit-button");
+
+                            if(!(component instanceof Animatable animatable)){
+                                return;
+                            }
+                            animatable.addAnimation(moveAnim);
+                        }
+                ));
                 Screens.getInstance().screenManager.register(screen);
             } else if (cmd.equalsIgnoreCase("reload")) {
                 if(screen != null) {

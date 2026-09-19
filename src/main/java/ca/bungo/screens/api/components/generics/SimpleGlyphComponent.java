@@ -27,6 +27,8 @@ import java.util.function.Consumer;
 
 public class SimpleGlyphComponent extends AbstractScreenComponent implements Animatable, Positionable, RotatableZ, Scalable {
 
+    private static final float RENDER_SCALE = 2f;
+
     private final Map<AnimationChannel, Animation<?>> animations = new HashMap<>();
 
     private final String id;
@@ -77,7 +79,7 @@ public class SimpleGlyphComponent extends AbstractScreenComponent implements Ani
 
         Location spawnLocation = screen.origin().clone().add(localOffset.x, localOffset.y, localOffset.z);
 
-        Vector3f scale = TextDisplayMetrics.computeBackgroundScale(glyphPixelWidth, glyphPixelHeight, width(), height(), unitScale);
+        Vector3f scale = TextDisplayMetrics.computeBackgroundScale(glyphPixelWidth * RENDER_SCALE, glyphPixelHeight * RENDER_SCALE, width(), height(), unitScale);
 
         float heightWorld = scale.y * (anchorHeightOffsetPx() + TextDisplayMetrics.GLYPH_PADDING_PX) * (float) TextDisplayMetrics.PIXELS_TO_WORLD;
         float widthWorld = scale.x * anchorWidthOffsetPx() * (float) TextDisplayMetrics.PIXELS_TO_WORLD;
@@ -115,7 +117,7 @@ public class SimpleGlyphComponent extends AbstractScreenComponent implements Ani
         Vector3f down = context.down();
         double unitScale = TextDisplayMetrics.UNIT_SCALE;
 
-        Vector3f scale = TextDisplayMetrics.computeBackgroundScale(glyphPixelWidth, glyphPixelHeight, width(), height(), unitScale);
+        Vector3f scale = TextDisplayMetrics.computeBackgroundScale(glyphPixelWidth * RENDER_SCALE, glyphPixelHeight * RENDER_SCALE, width(), height(), unitScale);
 
         float heightWorld = scale.y * (anchorHeightOffsetPx() + TextDisplayMetrics.GLYPH_PADDING_PX) * (float) TextDisplayMetrics.PIXELS_TO_WORLD;
         float widthWorld = scale.x * anchorWidthOffsetPx() * (float) TextDisplayMetrics.PIXELS_TO_WORLD;
